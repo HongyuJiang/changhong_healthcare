@@ -18,4 +18,4 @@ npm run build
 npm run build --report
 ```
 
-Please contact me if you have any questions. 
+# Please feel free to contact me if you have any question.
