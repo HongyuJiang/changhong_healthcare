@@ -15,7 +15,10 @@
           top=230
           id = qianyue
           class="dynamic-attrs"
-       />
+        />
+        <syou-pie-chart
+          class="pie-chart"
+        />
 
        <syou-group-bar-chart class="group-bar-chart"/>
        <syou-bubble-frequency-chart class="bubble-frequency-chart"/>
@@ -37,6 +40,9 @@
 <script>
 
 import SyouMapboxView from './components/SyouMapboxView';
+
+////////////////////////////////////////////////////
+import SyouPieChart from './components/SyouPieChart';
 import SyouLineChart from './components/SyouLineChart';
 import SyouVennChart from './components/SyouVennChart';
 import SyouGaugeChart from './components/SyouGaugeChart';
@@ -49,6 +55,7 @@ import SyouBubbleFrequencyChart from './components/SyouBubbleFrequencyChart';
 export default {
   name: 'App',
   components: {
+    SyouPieChart,
     SyouLineChart,
     SyouVennChart,
     SyouGaugeChart,

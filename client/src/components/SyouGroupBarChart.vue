@@ -13,52 +13,52 @@ import G2 from '@antv/g2';
 import * as d3 from 'd3';
 
 var data = [{
-  "label": "涪城区",
-  "type": "糖尿病",
+  "label": "一组",
+  "type": "慢病人数",
   "value": 2800
 }, {
-  "label": "涪城区",
-  "type": "高血压",
+  "label": "一组",
+  "type": "签约人数",
   "value": 2260
 }, {
-  "label": "游仙区",
-  "type": "糖尿病",
+  "label": "二组",
+  "type": "慢病人数",
   "value": 1800
 }, {
-  "label": "游仙区", 
-  "type": "高血压",
+  "label": "二组", 
+  "type": "签约人数",
   "value": 1300
 }, {
-  "label": "江油市",
-  "type": "糖尿病",
+  "label": "三组",
+  "type": "慢病人数",
   "value": 950
 }, {
-  "label": "江油市",
-  "type": "高血压",
+  "label": "三组",
+  "type": "签约人数",
   "value": 900
 }, {
-  "label": "三台县",
-  "type": "糖尿病",
+  "label": "四组",
+  "type": "慢病人数",
   "value": 500
 }, {
-  "label": "三台县",
-  "type": "高血压",
+  "label": "四组",
+  "type": "签约人数",
   "value": 390
 }, {
-  "label": "平武",
-  "type": "糖尿病",
+  "label": "五组",
+  "type": "慢病人数",
   "value": 170
 }, {
-  "label": "平武",
-  "type": "高血压",
+  "label": "五组",
+  "type": "签约人数",
   "value": 100
 },{
-  "label": "安州区", 
-  "type": "糖尿病",
+  "label": "六组", 
+  "type": "慢病人数",
   "value": 170
 }, {
-  "label": "安州区",
-  "type": "高血压",
+  "label": "六组",
+  "type": "签约人数",
   "value": 100
 }];
 

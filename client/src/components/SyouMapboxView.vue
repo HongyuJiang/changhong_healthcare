@@ -17,7 +17,7 @@ export default {
     this.$root.$on('addAIcon', () => {
       this.mapAddIcon()
     })
-    
+
   },
   methods: {
 
@@ -156,32 +156,127 @@ export default {
                 that.loading = false;
                 //console.error(error);
             });
+
+            that.mapAddCircle(that)
+    
       })
     },
-    mapAddIcon(){
+    mapAddDIYIcon(that){
 
-      this.map.addLayer({
-        "id": "wudu",
-        "type": "symbol",
-        "source": {
-            "type": "geojson",
-            "data": {
-                "type": "FeatureCollection",
-                "features": [{
-                    "type": "Feature",
-                    "geometry": {
-                        "type": "Point",
-                        "coordinates": [104.783758,31.891391]
-                    }
-                }]
+        that.map.loadImage('https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Cat_silhouette.svg/400px-Cat_silhouette.svg.png', function(error, image) {
+        if (error) throw error;
+        that.map.addImage('cat', image);
+        that.map.addLayer({
+            "id": "wudu",
+            "type": "symbol",
+            "source": {
+                "type": "geojson",
+                "data": {
+                    "type": "FeatureCollection",
+                    "features": [{
+                        "type": "Feature",
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [104.862946,31.333467]
+                        }
+                    }]
+                }
+            },
+            "layout": {
+                "icon-image": "cat",
+                "icon-size": 0.25,
+            
             }
-        },
-        "layout": {
-            "icon-image": "cafe-15"
-        }
-      });
+        });
+    });
+    },
 
-    }
+    mapAddIcon(that){
+
+        that.map.addLayer({
+            "id": "wudu",
+            "type": "symbol",
+            "source": {
+                "type": "geojson",
+                "data": {
+                    "type": "FeatureCollection",
+                    "features": [{
+                        "type": "Feature",
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [104.862946,31.333467]
+                        }
+                    }]
+                }
+            },
+            "layout": {
+                "icon-image": "marker-15",
+                "icon-size": 1
+            }
+        });
+    },
+
+    mapAddCircle(that){
+
+        that.map.addSource("wubai", {
+          "type": "geojson",
+          "data": {
+              "type": "FeatureCollection",
+              "features": [{
+                  "properties":{
+                      "name":"五柏村",
+                  },
+                  "type": "Feature",
+                  "geometry": {
+                    "type": "Point",
+                    "coordinates": [104.862946,31.333467]
+                  }
+              }]
+           }
+        })
+      
+        that.map.addLayer({
+            "id": "wubai-circle",
+            "type": "circle",
+            "source": 'wubai',
+            'paint': {
+                // make circles larger as the user zooms from z12 to z22
+                'circle-radius': 10,
+                'circle-color': '#933',
+                "circle-stroke-width": 2,
+                "circle-stroke-color": "#fff"
+             
+            }
+            
+        });
+
+        that.map.addLayer({
+            "id": "wubai-text",
+            "type": "symbol",
+            "source": 'wubai',
+             layout: {
+              "text-field": "{name}",
+             // "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
+              "text-size": 12,
+              "text-offset": [0, 1.2],
+              "text-anchor": "top",
+
+            },
+            "paint": {
+                "text-color": '#fff',
+              
+            }
+        });
+
+        that.map.on('click', 'wubai-circle', function (e) {
+          new mapboxgl.Popup()
+              .setLngLat(e.lngLat)
+              .setHTML(e.features[0].properties.name)
+              .addTo(that.map);
+        });
+
+    },
+
   },
 
    data() {

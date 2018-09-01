@@ -1,86 +1,79 @@
 <template>
-<div id="pie-container">
-  <svg width="500" height="300"></svg>
-</div>
+<div id='pie-chart-container'>
+      <div id='pie-container'>
+   
+      </div>
+  </div>
 </template>
 
 <script>
 const d3 = require('d3');
+
+var data = [{
+  item: '已签约',
+  count: 40,
+  percent: 0.4
+}, {
+  item: '',
+  count: 60,
+  percent: 0.6
+}];
+
 export default {
 
   name: 'pie-chart',
-
-  mounted: function() {
-
-    var svg = d3.select(this.$el).select('svg');
-    var width = +svg.attr('width');
-    var height = +svg.attr('height');
-    var margin = { top:20, left:0, bottom:30, right:0 };
-    var chartWidth = width - (margin.left + margin.right);
-    var chartHeight = height - (margin.top + margin.bottom);
-    this.chartLayer = svg
-      .append('g')
-      .attr(
-        "transform",
-        `translate(${margin.left}, ${margin.top})`
-      );
-
-    this.data = [1,2,3,4,5,6]
-    this.arc = d3.arc()
-      .outerRadius(chartHeight / 2)
-      .innerRadius(chartHeight / 4)
-      .padAngle(0.1)
-      .cornerRadius(0)
-    this.pieG = this.chartLayer
-      .append("g")
-      .attr(
-        "transform",
-        `translate(${chartWidth / 2}, ${chartHeight / 2})`
-      )
-    this.drawChart(this.data);
-  },
-
-  /*data() {
+  data () {
     return {
-      points: [1,2,3,4,5],
-    };
-  },*/
-
-  watch: {
-    data: function(newData) {
-      this.drawChart(newData);
+      data: data
     }
   },
 
+  mounted: function() {
+
+    this.chartInit(this.data);
+  },
+
   methods: {
-    drawChart: function(data) {
 
-        console.log(data)
-      var arcs = d3.pie()
-          .sort(null)
-          .value(function(d) { return d; })
-          (data)
-      var block = this.pieG.selectAll(".arc")
-        .data(arcs)
-      block.select('path').attr('d', this.arc)
-      var newBlock = block
-        .enter()
-        .append("g")
-        .classed("arc", true)
-      newBlock.append("path")
-        .attr("d", this.arc)
-        .attr("id", function(d, i) { return "arc-" + i })
-        .attr("stroke", "none")
-        .attr("fill", d => d3.interpolateCool(Math.random()))
-        .attr("opacity", 0.7)
-        .on('click', () =>{ this.$root.$emit('addAIcon') })
+    chartInit(){
+        var chart = new G2.Chart({
+          container: 'pie-container',
+          height: 250
+        });
+        chart.source(data, {
+          percent: {
+            formatter: function formatter(val) {
+              val = val * 100 + '%';
+              return val;
+            }
+          }
+        });
+        chart.coord('theta');
+        chart.tooltip({
+          showTitle: false
+        });
+        chart.intervalStack().position('percent').color('item').label('percent', {
+          // autoRotate: false,
+          offset: -20,
+          textStyle: {
+            rotate: 0,
+            textAlign: 'center',
+            shadowBlur: 2,
+            shadowColor: 'rgba(255, 255, 255, .45)',
+            fill:'#fff'
+          }
+        }).tooltip('item*percent', function(item, percent) {
+          percent = percent * 100 + '%';
+          return {
+            name: item,
+            value: percent
+          };
+        }).style({
+          lineWidth: 2,
+          stroke: '#000'
+        });
 
-      newBlock.append("text")
-        .attr("dx", 10)
-        .attr("dy", -5)
-        .append("textPath")
-        .attr("xlink:href", function(d, i) { return "#arc-" + i; })
-        .text(function(d) { return d.data.name })
+        chart.render();
     }
   }
 }
@@ -88,10 +81,13 @@ export default {
 
 <style lang="css">
 
-div #pie-container{
 
-  position: absolute;
-  top:500px;
+#pie-chart-container{
+  width:80%;
+  height:200px;
+  position:absolute;
+  top:150px;
+  left:50px;
 }
 
 </style>
