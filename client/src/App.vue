@@ -19,17 +19,38 @@
         <syou-pie-chart
           class="pie-chart"
         />
-
-       <syou-group-bar-chart class="group-bar-chart"/>
-       <syou-bubble-frequency-chart class="bubble-frequency-chart"/>
+        <syou-group-pie-chart
+          class="group-pie-chart"
+        />
+        <syou-group-bar-chart
+          class="group-bar-chart"
+        />
+     
+     
     </div>
 
     <syou-mapbox-view class="mapbox-view"/>
 
     <div class="float-layer right-float-layer">
-      <syou-line-chart class="line-chart"/>
-      <syou-venn-chart class="venn-chart"/>
-      <syou-gauge-chart class="gauge-chart"/>
+      <syou-vertical-bar-chart class="vertical-bar-chart"/>
+      <syou-tick-dash-chart class="tick-dash-chart"/>
+      <syou-bubble-chart class="bubble-chart" />
+      <syou-gauge-chart 
+        id='index-1'
+        right='-50'
+        container="gauge1" 
+        class="gauge-chart" 
+        value='100'
+        name='签约评估得分'
+      />
+      <syou-gauge-chart
+        id='index-2'
+        right='200'
+        container="gauge2" 
+        class="gauge-chart"
+        value='90'
+        name='达标评估得分'
+      />
     </div>  
 
   </div>
@@ -44,26 +65,32 @@ import SyouMapboxView from './components/SyouMapboxView';
 ////////////////////////////////////////////////////
 import SyouPieChart from './components/SyouPieChart';
 import SyouLineChart from './components/SyouLineChart';
-import SyouVennChart from './components/SyouVennChart';
 import SyouGaugeChart from './components/SyouGaugeChart';
+import SyouRatioChart from './components/SyouRatioChart';
 import SyouGroupBarChart from './components/SyouGroupBarChart';
 import FixedAttrIndicator from './components/FixedAttrIndicator';
 import DynamicAttrIndicator from './components/DynamicAttrIndicator';
-import SyouBubbleFrequencyChart from './components/SyouBubbleFrequencyChart';
-
+//import SyouBubbleFrequencyChart from './components/SyouBubbleFrequencyChart';
+import SyouGroupPieChart from './components/SyouGroupPieChart';
+import SyouVerticalBarChart from './components/SyouVerticalBarChart';
+import SyouTickDashChart from './components/SyouTickDashChart';
+import SyouBubbleChart from './components/SyouBubbleChart';
 
 export default {
   name: 'App',
   components: {
     SyouPieChart,
     SyouLineChart,
-    SyouVennChart,
     SyouGaugeChart,
     SyouMapboxView,
+    SyouRatioChart,
     SyouGroupBarChart,
+    SyouGroupPieChart,
+    SyouVerticalBarChart,
     FixedAttrIndicator,
     DynamicAttrIndicator,
-    SyouBubbleFrequencyChart
+    SyouTickDashChart,
+    SyouBubbleChart,
   }
 }
 </script>
@@ -110,14 +137,16 @@ body {
 .chart-name-right{
 
     float:right; 
-    margin-right:30px;
+    right:10px;
+    margin: 0%;
   
 }
 
 .chart-name-left{
 
     float:left; 
-    margin-left:50px;
+    left:10px; 
+    margin: 5%;
 
 }
 </style>

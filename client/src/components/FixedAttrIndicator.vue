@@ -9,7 +9,7 @@ export default {
   name: 'fixed-attrs',
   data() {
     return {
-      checkedNames: '四川省卫生与计划生育委员会'
+      checkedNames: '芦溪镇五柏村'
     };
   },
   
@@ -22,7 +22,6 @@ export default {
 
     border-top: 3px solid #F0B04D;
     position: absolute;
-    width:51%;
     height: 3%;
     background: rgba(255,255,255,0.1)
 }

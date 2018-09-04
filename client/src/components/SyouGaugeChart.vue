@@ -1,216 +1,178 @@
 <template>
-
-  <div id='gauge-chart-container'>
-      <div class='chart-name chart-name-right'>一些指标</div>
-      <div id='gauge-chart'>
+<div v-bind:id='id' class="gauge-chart-container">
+      <div v-bind:id='container' >
    
       </div>
   </div>
 </template>
+
 <script>
+const d3 = require('d3');
 
-import G2 from '@antv/g2';
+const props = {
 
-import * as d3 from 'd3';
-
-let Shape = G2.Shape;
-Shape.registerShape('point', 'pointer', {
-  drawShape: function drawShape(cfg, group) {
-    let center = this.parsePoint({ // 获取极坐标系下画布中心点
-      x: 0,
-      y: 0
-    });
-    // 绘制指针
-    group.addShape('line', {
-      attrs: {
-        x1: center.x,
-        y1: center.y,
-        x2: cfg.x,
-        y2: cfg.y,
-        stroke: cfg.color,
-        lineWidth: 5,
-        lineCap: 'round',
-        opacity: 0.7
-      }
-    });
-    return group.addShape('circle', {
-      attrs: {
-        x: center.x,
-        y: center.y,
-        r: 9.75,
-        stroke: '#333',
-        stroke: cfg.color,
-        lineWidth: 4.5,
-        fill: cfg.color,
-        opacity: 0.5
-      }
-    });
+  id:{
+    type: String,
+    default: () => 0,
+  },
+  right: {
+    type: String,
+    default: () => '',
+  },
+  value: {
+    type: String,
+    default: () => 0,
+  },
+  container: {
+    type: String,
+    default: () => '',
+  },
+  name: {
+    type: String,
+    default: () => '',
   }
-});
-
-function creatData() {
-    var data = [];
-    var val = Math.random() * 6;
-    val = val.toFixed(1);
-    data.push({
-        value: val * 1
-    });
-    return data;
-}
-
-let color = ['#52040B', '#D67200', '#DE1F00'];
+};
 
 export default {
-  name:'gauge-chart',
-  methods:{
 
-        draw(data) {
-            
-            console.log(data)
+  name: 'gauge-chart',
+  props,
+  mounted: function() {
 
-            const lineWidth = 20;
-            const val = data[0].value;
-            const yFixedPos = 0.92
-            const fixedStyle = {
-                zIndex: 1,
-                start: [0, yFixedPos],
-                end: [val, yFixedPos],
-                style: {
-                    stroke: color[0],
-                    opacity: 0.7,
-                    lineWidth: lineWidth
-                }
-            }
-           
-            this.chart.guide().clear();
-        // 绘制仪表盘背景
-            this.chart.guide().arc({
-                zIndex: 0,
-                top: false,
-                start: [0, 0.92],
-                end: [6, 0.92],
-                style: { // 底灰色
-                    stroke: '#ccc',
-                    opacity: '0.3',
-                    lineWidth: lineWidth
-                }
-            });
+    d3.select('#' + this.id).style('right', this.right + 'px')
+    this.chartInit(this.data);
+  },
 
-        //for deep copy
-        console.log(JSON.stringify(fixedStyle))
-        let z2Style = JSON.parse(JSON.stringify(fixedStyle));
-        let z3Style = JSON.parse(JSON.stringify(fixedStyle));
-        let z4Style = JSON.parse(JSON.stringify(fixedStyle));
-        let z5Style = JSON.parse(JSON.stringify(fixedStyle));
+  methods: {
 
-        z2Style.stroke = color[0];
+    chartInit(){
 
-        z3Style.start = [2, yFixedPos];
-        z3Style.end = [4, yFixedPos];
-        z3Style.stroke = color[1];
-
-        z4Style.start = [4, yFixedPos];
-        z4Style.stroke = color[2];
-
-        z5Style.start = [2, yFixedPos];
-        z5Style.stroke = color[1];
-
-        console.log(fixedStyle, z2Style, z3Style, z4Style, z5Style)
-
-        val >= 2 && this.chart.guide().arc(z2Style);
-        val >= 4 && this.chart.guide().arc(z3Style);
-        val > 4 && val <= 6 && this.chart.guide().arc(z4Style);
-        val > 2 && val <= 4 && this.chart.guide().arc(z5Style);
-        val < 2 && this.chart.guide().arc(fixedStyle);
-
-    
-        // 绘制指标数字
-        this.chart.guide().html({
-            position: ['50%', '110%'],
-            html: '<div style="width: 300px;text-align: center;">' +
-             '<p style="font-size: 15px; color: #fff;margin: 0;">完成率</p>' +
-              '<p style="font-size: 20px;color: #fff;margin: 0;">' +
-               val * 10 + '%</p>' + '</div>'
-        });
-        this.chart.changeData(data);
-    },
-
-      chartInit(){
-
-            this.chart = new G2.Chart({
-                container: 'gauge-chart',
-                //forceFit: true,
-                height: 250,
-                width: 250,
-                padding: [50, 0, 30, 0],
-                animate: false
-            });
-            this.chart.source(creatData);
-
-            this.chart.coord('polar', {
-                startAngle: -9 / 8 * Math.PI,
-                endAngle: 1 / 8 * Math.PI,
-                radius: 0.75
-            });
-            this.chart.scale('value', {
-                min: 0,
-                max: 6,
-                tickInterval: 1,
-            nice: false
-            });
-
-            this.chart.axis('1', false);
-            this.chart.axis('value', {
-            zIndex: 2,
-            line: null,
-            label: {
-                offset: -20,
-                textStyle: {
-                fontSize: 12,
-                fill: '#fff',
-                textAlign: 'center',
-                textBaseline: 'middle'
-                }
-            },
-            tickLine: {
-                length: -20,
-                stroke: '#000',
-                strokeOpacity: 1
-            },
-            grid: null
-            });
-            this.chart.legend(false);
-            this.chart.point().position('value*1').shape('pointer').color('value', function(val) {
-            if (val < 2) {
-                return color[0];
-            } else if (val <= 4) {
-                return color[1];
-            } else if (val <= 6) {
-                return color[2];
-            }
-            }).active(false);
-
-            this.draw(creatData());
-        
+        var data1 = [];
+        for (var i = 0; i < 50; i++) {
+            var item = {};
+            item.type = i + '';
+            item.value = 10;
+            data1.push(item);
         }
-  },
 
-  mounted(){
-    
-    this.chartInit()
-  },
+        var data2 = [];
+        for (var _i = 0; _i < 50; _i++) {
+            var _item = {};
+            _item.type = _i + '';
+            _item.value = 10;
+        
+            if (_i > this.value/2) {
+                _item.value = 0;
+            }
+            data2.push(_item);
+        }
+
+        var chart = new G2.Chart({
+        container: this.container,
+        height: 150,
+        padding: 0
+        });
+        chart.scale({
+        type: {
+            range: [0, 1]
+        },
+        value: {
+            sync: true
+        }
+        });
+        chart.legend(false);
+        chart.tooltip(false);
+        var view1 = chart.view();
+        view1.source(data1);
+        view1.axis(false);
+        view1.coord('polar', {
+            startAngle: -9 / 8 * Math.PI,
+            endAngle: 1 / 8 * Math.PI,
+            innerRadius: 0.75,
+            radius: 0.8
+        });
+        view1.interval().position('type*value').color('#CBCBCB').size(3);
+
+        var view2 = chart.view();
+        view2.source(data1, {
+        type: {
+            tickCount: 3
+        }
+        });
+        view2.axis('value', false);
+        view2.axis('type', {
+        grid: null,
+        line: null,
+        tickLine: null,
+        label: {
+            offset: -15,
+            textStyle: {
+            textAlign: 'center',
+            fill: '#CBCBCB',
+            fontSize: 12
+            },
+            formatter: function formatter(val) {
+            if (val === '49') {
+                return 50;
+            }
+
+            return val;
+            }
+        }
+        });
+        view2.coord('polar', {
+            startAngle: -9 / 8 * Math.PI,
+            endAngle: 1 / 8 * Math.PI,
+            innerRadius: 0.95,
+            radius: 0.55
+        });
+        view2.interval().position('type*value').color('#CBCBCB').size(3);
+
+        var view3 = chart.view();
+        view3.source(data2);
+        view3.axis(false);
+        view3.coord('polar', {
+            startAngle: -9 / 8 * Math.PI,
+            endAngle: 1 / 8 * Math.PI,
+            innerRadius: 0.75,
+            radius: 0.8
+        });
+        view3.interval().position('type*value').color('value', '#3023AE-#53A0FD').opacity(1).size(3);
+        view3.guide().text({
+        position: ['50%', '65%'],
+        content: this.value,
+        style: {
+            fill: '#CBCBCB',
+            fontSize: 32,
+            textAlign: 'center',
+            textBaseline: 'middle'
+        }
+        });
+
+        view3.guide().text({
+        position: ['50%', '95%'],
+        content: this.name,
+        style: {
+            fill: '#CBCBCB',
+            fontSize: 15,
+            textAlign: 'center',
+            textBaseline: 'middle'
+        }
+        });
+
+        chart.render();
+    }
+  }
 }
 </script>
 
-<style scoped>
+<style lang="css">
 
-#gauge-chart-container{
 
-  width:100%;
+.gauge-chart-container{
   height:200px;
   position:absolute;
-  top:780px;
-  
+  bottom:0px;
 }
 
 </style>

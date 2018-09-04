@@ -241,10 +241,10 @@ export default {
             "source": 'wubai',
             'paint': {
                 // make circles larger as the user zooms from z12 to z22
-                'circle-radius': 10,
-                'circle-color': '#933',
-                "circle-stroke-width": 2,
-                "circle-stroke-color": "#fff"
+                'circle-radius': 7,
+                'circle-color': '#FCE246',
+                "circle-stroke-width": 3,
+                "circle-stroke-color": "#FE7F2D"
              
             }
             

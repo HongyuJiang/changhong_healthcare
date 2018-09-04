@@ -14,7 +14,7 @@ var data = [{
   count: 40,
   percent: 0.4
 }, {
-  item: '',
+  item: '未签约',
   count: 60,
   percent: 0.6
 }];
@@ -48,13 +48,16 @@ export default {
             }
           }
         });
+        chart.legend(false);
         chart.coord('theta');
-        chart.tooltip({
-          showTitle: false
-        });
-        chart.intervalStack().position('percent').color('item').label('percent', {
+       
+        chart.intervalStack().position('percent').color('item')
+        .label('percent', {
           // autoRotate: false,
-          offset: -20,
+          formatter: function formatter(val, item) {
+            return item.point.item + ': ' + val;
+          },
+          offset: 0,
           textStyle: {
             rotate: 0,
             textAlign: 'center',
@@ -62,7 +65,8 @@ export default {
             shadowColor: 'rgba(255, 255, 255, .45)',
             fill:'#fff'
           }
-        }).tooltip('item*percent', function(item, percent) {
+        })
+        .tooltip('item*percent', function(item, percent) {
           percent = percent * 100 + '%';
           return {
             name: item,
@@ -86,8 +90,8 @@ export default {
   width:80%;
   height:200px;
   position:absolute;
-  top:150px;
-  left:50px;
+  top:120px;
+  left:20px;
 }
 
 </style>
