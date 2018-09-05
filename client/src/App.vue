@@ -4,14 +4,14 @@
        <fixed-attr-indicator class="fixed-attrs"/>
        <dynamic-attr-indicator 
           name=辖区居民
-          value=5406537
+          value=1303
           top=130
           id = xiaqu
           class="dynamic-attrs"
         />
         <dynamic-attr-indicator
           name=签约人数
-          value=33768
+          value=974
           top=230
           id = qianyue
           class="dynamic-attrs"

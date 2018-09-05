@@ -79,6 +79,7 @@ export default {
 
     this.chart = null
 
+    this.focus = '高血压'
     
     DataProvider.getItemGroupCsv().then(response => {
 
@@ -95,6 +96,8 @@ export default {
     this.$root.$on('updateBubble', (msg) => {
 
       var data = this.dataProcess(this.data, msg)
+
+      d3.select('#bubble-container-name').text(msg)
 
       this.chart.changeData(data)
 
@@ -203,9 +206,9 @@ export default {
           title: 'country'
         });
         this.chart.point().position('group*ratio').size('value', [5, 20]).label('group*value', {
-        offset: 0, // 文本距离图形的距离
-        textStyle: {
-            fill:'white'
+          offset: 0, // 文本距离图形的距离
+          textStyle: {
+              fill:'white'
         }
         }).opacity(0.3).shape('circle').tooltip('group*value').style({
           lineWidth: 1,
@@ -231,11 +234,12 @@ export default {
 #bubble-container-name{
 
    position:absolute;
-   padding:100px;
-   left:20%;
-   top:10%;
+   width:100%;
+   top:60%;
    color:rgba(255,255,255,0.5);
    font-size: 70px;
+   text-align: center;
+   text-anchor: middle;
 
 }
 

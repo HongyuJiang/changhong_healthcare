@@ -1,6 +1,6 @@
 <template>
   <div id='group-bar-chart-container'>
-    <div class='chart-name chart-name-left special'>小组签约类型组成</div>
+    <div class='chart-name chart-name-left special'>小组慢病人群签约率及其组成</div>
     <div id='group-bar-chart'>
    
     </div>
@@ -13,6 +13,10 @@ import { DataSet } from '@antv/data-set'
 import DataProvider from '../DataProvider';
 
 import * as d3 from 'd3';
+
+var colors = [ '#FE902D', '#FCCA74',
+ '#A8C181', '#A8C181', '#7DC181', '#5FC181',
+  '#27C181', '#109CFF', '#104EFF'];
 
 export default {
 
@@ -69,9 +73,8 @@ export default {
         var dv = ds.createView().source(data);
         dv.transform({
           type: 'fold',
-          fields: ['高血压', '糖尿病', '肺结核', '低保',
-           '五保', '残疾人口', '贫困人口', '低龄儿童',
-            '孕产妇', '一般人群'], // 展开字段集
+          fields: ['贫困人口', '高血压', '糖尿病', '肺结核', '低保',
+           '五保', '残疾人口', '低龄儿童', '孕产妇'], 
           key: '慢病类型', // key字段
           value: '数量', // value字段
           retains: ['label'] // 保留字段集，默认为除fields以外的所有字段
@@ -79,15 +82,17 @@ export default {
        
         var chart = new G2.Chart({
           container: 'group-bar-chart',
-          height: 600,
-          width: 400,
-          padding: [0,50,60,60],
+          height: 650,
+          width: 550,
+          padding: [0,100,60,60],
         });
+
         chart.source(dv);
+        chart.tooltip(false);
         chart.coord().transpose();
         chart.axis('label', {
           label: {
-            offset: -300,
+            offset: -350,
             textStyle: {
                 fontSize: 12, 
                 fill: '#ccc', 
@@ -102,18 +107,32 @@ export default {
             }
           }
         });
-        chart.intervalStack().position('label*数量').color('慢病类型');
+
+        chart.legend('慢病类型',{ 
+          width: 200,
+          height: 50,
+          position: 'right'
+        });
+
+
+        chart.intervalStack().position('label*数量')
+        .color('慢病类型', colors).opacity(1)
+        .style({ 
+            stroke: 'black',
+            lineWidth: 1
+        })
+
        
+                
         chart.on('click', ev => {
 
-          //console.log(ev)
+          let meta = ev.data._origin
 
-          this.$root.$emit('updateRatio')
+          this.$root.$emit('updateRatio', meta.label)
 
-          this.$root.$emit('updateVerticalBar', 'group1')
+          this.$root.$emit('updateVerticalBar', meta.label)
 
-           this.$root.$emit('updateBubble','糖尿病')
-
+          this.$root.$emit('updateBubble', meta['慢病类型'])
           
         });
 

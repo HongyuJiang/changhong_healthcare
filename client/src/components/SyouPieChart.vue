@@ -12,11 +12,11 @@ const d3 = require('d3');
 var data = [{
   item: '已签约',
   count: 40,
-  percent: 0.4
+  percent: 0.7
 }, {
   item: '未签约',
   count: 60,
-  percent: 0.6
+  percent: 0.3
 }];
 
 export default {
@@ -51,7 +51,8 @@ export default {
         chart.legend(false);
         chart.coord('theta');
        
-        chart.intervalStack().position('percent').color('item')
+        chart.intervalStack().position('percent')
+        .color('item',['#0E82DE','#333'])
         .label('percent', {
           // autoRotate: false,
           formatter: function formatter(val, item) {
@@ -63,7 +64,8 @@ export default {
             textAlign: 'center',
             shadowBlur: 2,
             shadowColor: 'rgba(255, 255, 255, .45)',
-            fill:'#fff'
+            fill:'#fff',
+            fontSize:16,
           }
         })
         .tooltip('item*percent', function(item, percent) {

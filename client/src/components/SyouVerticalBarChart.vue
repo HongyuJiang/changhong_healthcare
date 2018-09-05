@@ -1,6 +1,8 @@
 <template>
   <div id='vertical-bar-chart-container'>
     <div class='chart-name chart-name-right'>慢病类型-签约情况统计</div>
+    
+     <h1 id='vertical-container-name'> 全组</h1>
     <div id='vertical-bar-chart'>
    
     </div>
@@ -13,6 +15,19 @@ import G2 from '@antv/g2';
 import * as d3 from 'd3';
 
 import DataProvider from '../DataProvider';
+
+ var translationTable = {
+          '一组':'group1',
+          '二组':'group1',
+          '三组':'group1',
+          '四组':'group1',
+          '五组':'group1',
+          '六组':'group1',
+          '七组':'group1',
+          '八组':'group1',
+          '九组':'group1',
+          '十组':'group1',
+        }
 
 export default {
 
@@ -36,9 +51,11 @@ export default {
 
     this.$root.$on('updateVerticalBar', (msg) => {
 
-      let data = this.dataProcess(this.data, msg)
+      let data = this.dataProcess(this.data, translationTable[msg])
 
       this.chart.changeData(data)
+
+      d3.select('#vertical-container-name').text(msg)
 
       console.log('updateVerticalBar')
     })
@@ -69,7 +86,7 @@ export default {
               let meta = {}
               
               meta['item'] = lists[j]['item']
-              meta['type'] = '未签约'
+              meta['type'] = '人数'
               meta['value'] = parseInt(lists[j][dim])
 
               newData.push(meta)
@@ -113,7 +130,8 @@ export default {
           }
         });
        // chart.coord().transpose().scale(1, -1);
-        this.chart.interval().position('item*value').color('type').adjust([{
+        this.chart.interval().position('item*value')
+        .color('type', ['#1088FF','#666']).adjust([{
           type: 'dodge',
           marginRatio: 1/ 128
         }]);
@@ -173,6 +191,18 @@ export default {
   position:absolute;
   top:20px;
   right:20px;
+}
+
+#vertical-container-name{
+
+   position:absolute;
+   width:100%;
+   top:10%;
+   color:rgba(255,255,255,0.5);
+   font-size: 70px;
+   text-align: center;
+   text-anchor: middle;
+
 }
 
 </style>

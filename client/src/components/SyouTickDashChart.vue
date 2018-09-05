@@ -65,17 +65,29 @@ export default {
 
     this.chart = null
 
-    this.$root.$on('updateRatio', () => {
+    this.$root.$on('updateRatio', (msg) => {
 
-      this.data[9]['value'] = 90
+      var ratioTable = {
 
-      this.data[3]['value'] = 0
+        '一组':31,
+        '二组':40,
+        '三组':51,
+        '四组':34,
+        '五组':44,
+        '六组':51,
+        '七组':29,
+        '八组':42,
+        '九组':37,
+        '十组':33,
+      }
+
+      this.data[9]['value'] = ratioTable[msg]
 
       this.chart.destroy()
 
       this.chartInit(this.data);
+      
     })
-
 
     this.chartInit(this.data);
 
