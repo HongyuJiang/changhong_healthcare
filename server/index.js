@@ -6,6 +6,7 @@ const url = "mongodb://localhost:27017/";
 
 app.get('/regions', function (req, res) {
 
+   
     // Website you wish to allow to connect
   res.setHeader('Access-Control-Allow-Origin', '*');
 
@@ -19,16 +20,16 @@ app.get('/regions', function (req, res) {
     // to the API (e.g. in case you use sessions)
   res.setHeader('Access-Control-Allow-Credentials', true);
 
-   MongoClient.connect(url, function(err, db) {
-    if (err) throw err;
-    const dbo = db.db("MapboxRegionJson");
-    dbo.collection("510781").findOne({}, function(err, result) {
-      if (err) throw err;
-  
-      db.close();
+  const fs = require('fs');
 
-      res.send(result);
-    });
+  fs.readFile('510781.json', 'utf8', function read(err, data) {
+      if (err) {
+          throw err;
+      }
+      
+      ret = JSON.parse(data)
+
+      res.send(ret);
   });
 })
 
@@ -49,8 +50,7 @@ app.get('/groupitem', function (req, res) {
 
   const d3 = require('d3-dsv');
   const fs = require('fs');
-  var content;
-
+  
   fs.readFile('fake_data.csv', 'utf8', function read(err, data) {
       if (err) {
           throw err;
