@@ -205,7 +205,9 @@ export default {
         this.chart.tooltip({
           title: 'country'
         });
-        this.chart.point().position('group*ratio').size('value', [5, 20]).label('group*value', {
+        this.chart.point().position('group*ratio')
+        .size('value', [8, 25])
+        .label('value', {
           offset: 0, // 文本距离图形的距离
           textStyle: {
               fill:'white'

@@ -128,8 +128,8 @@ export default {
       this.map = new mapboxgl.Map({
           container: 'map', // container id
           style: 'mapbox://styles/hongyujiang/cjl1ya0sn4m0m2sqj0pbkuqor', // stylesheet location
-          center: [104.737877,31.457893], // starting position [lng, lat]
-          zoom: 8 // starting zoom
+          center: [104.849,31.5580], // starting position [lng, lat]
+          zoom: 8.5 // starting zoom
       });
 
     },
@@ -144,7 +144,6 @@ export default {
 
               }, error => {
                 that.loading = false;
-                //console.error(error);
             });
 
             DataProvider.getCountyJson().then(response => {
@@ -154,7 +153,6 @@ export default {
 
               }, error => {
                 that.loading = false;
-                //console.error(error);
             });
 
             that.mapAddCircle(that)
