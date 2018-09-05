@@ -3,7 +3,7 @@ import axios from 'axios';
 export default class DataProvider {
     static getCountyJson() {
 
-        return axios.get('http://10.10.4.250:3001/regions');
+        return axios.get('http://173.199.122.158:3001/regions');
     }
     static getRegionJson() {
 
@@ -11,6 +11,6 @@ export default class DataProvider {
     }
     static getItemGroupCsv() {
 
-        return axios.get('http://localhost:3001/groupitem');
+        return axios.get('http://173.199.122.158:3001/groupitem');
     }
 }
