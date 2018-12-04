@@ -1,77 +1,49 @@
 <template>
-<div id='bubble-chart-container'>
-      <div class='chart-name chart-name-right'>慢病-小组统计</div>
-      <h1 id='bubble-container-name'> 高血压</h1>
-      <div id='bubble-container'>
+<div class='bubble-chart-container'>
+      <div class='chart-name chart-name-right'>{{name}}</div>
+      <h1 class='bubble-container-name'>{{focus}}</h1>
+      <div v-bind:id='id' class='bubble-container'>
    
       </div>
   </div>
 </template>
 
 <script>
-
+ 
 const d3 = require('d3');
 
 import DataProvider from '../DataProvider';
 
-var data = [{
-  item: '高血压',
-  group: 1,
-  value: 34,
-  ratio: 100
-},  {
-  item: '高血压',
-  group: 2,
-  value: 50,
-  ratio: 100
-}, {
-  item: '高血压',
-  group: 3,
-  value: 40,
-  ratio: 100
-},  {
-  item: '高血压',
-  group: 4,
-  value: 20,
-  ratio: 100
-}, {
-  item: '高血压',
-  group: 5,
-  value: 70,
-  ratio: 100
-}, {
-  item: '高血压',
-  group: 6,
-  value: 55,
-  ratio: 100
-}, {
-  item: '高血压',
-  group: 7,
-  value: 55,
-  ratio: 100
-}, {
-  item: '高血压',
-  group: 8,
-  value: 55,
-  ratio: 100
-}, {
-  item: '高血压',
-  group: 9,
-  value: 55,
-  ratio: 100
-}, {
-  item: '高血压',
-  group: 10,
-  value: 55,
-  ratio: 40
-}];
+const props = {
+  id: {
+    type: String,
+    default: () => 'bubble-chart-container',
+  },
+  name: {
+    type: String,
+    default: () => '慢病-小组统计',
+  },
+  focus: {
+    type: String,
+    default: () => '高血压',
+  },
+  top:{
+    type: Number,
+    default: () => 450,
+  },
+  right:{
+    type: Number,
+    default: () => 20,
+  }
+};
 
 export default {
 
   name: 'bubble-chart',
+  props,
   data () {
     return {
-      data: data
+      data: {}
     }
   },
 
@@ -79,35 +51,51 @@ export default {
 
     this.chart = null
 
-    this.focus = '高血压'
-    
-    DataProvider.getItemGroupCsv().then(response => {
+    //Load data and initialize the chart 
+    this.loadData()
 
-          this.data = response.data
-              
-          var data = this.dataProcess(response.data, '高血压')
-
-          this.chartInit(data)
-
-        }, error => {
-       
+    //Add a listener for window's resize`
+    window.addEventListener("resize", () => {
+      this.windowResize(window.innerWidth * 0.3, window.innerHeight * 0.3);
     });
 
-    this.$root.$on('updateBubble', (msg) => {
+    //Response the update signal from other components
+    this.$root.$on('updateBubble', (focus) => {
 
-      var data = this.dataProcess(this.data, msg)
+      this.focusUpdate(focus);
+    })
 
-      d3.select('#bubble-container-name').text(msg)
+    d3.selectAll('.bubble-chart-container')
+    .style('top', this.top + 'px')
+    .style('right', this.right + 'px')
+    
+  },
+
+  watch:{
+
+    //If data is updated, change chart source
+    data: function(){
+
+      let data = this.dataProcess(this.data, this.focus)
 
       this.chart.changeData(data)
 
-      console.log('updateBubble')
-    })
-    
+    },
+
+    //If focus item changed, change chart source
+    focus: function(){
+
+      let data = this.dataProcess(this.data, this.focus)
+
+      this.chart.changeData(data)
+
+    }
+
   },
 
   methods: {
 
+    //data process 
     dataProcess(lists, dim){
 
         let newData = []
@@ -142,13 +130,11 @@ export default {
         return newData
       },
 
-
-    chartInit(){
+    //Chart initialization
+    chartInit(data){
 
         this.chart = new G2.Chart({
-          container: 'bubble-container',
-          height: 350,
-          width: 600,
+          container: this.id,
           padding: [50, 20, 50, 80],
         });
 
@@ -218,6 +204,40 @@ export default {
         });
     
         this.chart.render();
+    },
+
+    //Update the focus item
+    focusUpdate(focus){
+
+      this.focus = focus
+
+    },
+
+    //Load data then intialize the chart
+    loadData(){
+
+      DataProvider.getItemGroupCsv().then(response => {
+
+          this.data = response.data
+              
+          let data = this.dataProcess(response.data, this.focus)
+
+          this.chartInit(data)
+
+          //Initialize the size of chart
+          this.windowResize(window.innerWidth * 0.3, window.innerHeight * 0.3);
+          
+        }, error => {
+
+          console.log('unable to get data')
+        });
+    },
+
+    //Change chart size when window's size changed
+    windowResize(width, height){
+
+      this.chart.changeSize(width, height)
+
     }
   }
 }
@@ -226,14 +246,12 @@ export default {
 <style lang="css">
 
 
-#bubble-chart-container{
-  height:200px;
+.bubble-chart-container{
+  
   position:absolute;
-  top:450px;
-  right:20px;
 }
 
-#bubble-container-name{
+.bubble-container-name{
 
    position:absolute;
    width:100%;
