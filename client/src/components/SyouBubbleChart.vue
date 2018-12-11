@@ -34,25 +34,23 @@ const props = {
   right:{
     type: Number,
     default: () => 20,
-  }
+  },
+  data: {}
 };
 
 export default {
 
   name: 'bubble-chart',
   props,
-  data () {
-    return {
-      data: {}
-    }
-  },
-
   mounted: function() {
 
     this.chart = null
 
-    //Load data and initialize the chart 
-    this.loadData()
+    //Initialize the chart's configuration
+    this.chartInit()
+
+    //Initialize the size of chart
+    this.windowResize(window.innerWidth * 0.3, window.innerHeight * 0.3);
 
     //Add a listener for window's resize`
     window.addEventListener("resize", () => {
@@ -65,7 +63,7 @@ export default {
       this.focusUpdate(focus);
     })
 
-    d3.selectAll('.bubble-chart-container')
+    d3.select(d3.select('#' + this.id).node().parentNode)
     .style('top', this.top + 'px')
     .style('right', this.right + 'px')
     
@@ -75,6 +73,8 @@ export default {
 
     //If data is updated, change chart source
     data: function(){
+
+      console.log(this.data)
 
       let data = this.dataProcess(this.data, this.focus)
 
@@ -131,14 +131,14 @@ export default {
       },
 
     //Chart initialization
-    chartInit(data){
+    chartInit(){
 
         this.chart = new G2.Chart({
           container: this.id,
           padding: [50, 20, 50, 80],
         });
 
-       this.chart.source(data, {
+       this.chart.source({}, {
         group: {
             tickInterval: 1, // 自定义刻度间距
             nice: false, // 不对最大最小值优化
@@ -211,26 +211,6 @@ export default {
 
       this.focus = focus
 
-    },
-
-    //Load data then intialize the chart
-    loadData(){
-
-      DataProvider.getItemGroupCsv().then(response => {
-
-          this.data = response.data
-              
-          let data = this.dataProcess(response.data, this.focus)
-
-          this.chartInit(data)
-
-          //Initialize the size of chart
-          this.windowResize(window.innerWidth * 0.3, window.innerHeight * 0.3);
-          
-        }, error => {
-
-          console.log('unable to get data')
-        });
     },
 
     //Change chart size when window's size changed

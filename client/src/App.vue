@@ -15,7 +15,7 @@
           top=230
           id = qianyue
           class="dynamic-attrs"
-        />
+        /> 
         <syou-pie-chart
           class="pie-chart"
         />
@@ -34,7 +34,7 @@
     <div class="float-layer right-float-layer">
       <syou-vertical-bar-chart class="vertical-bar-chart"/>
       <syou-tick-dash-chart class="tick-dash-chart"/>
-      <syou-bubble-chart class="bubble-chart" />
+      <syou-bubble-chart class="bubble-chart" v-bind:data = "bubbleData" />
       <syou-gauge-chart 
         id='index-1'
         right='-50'
@@ -75,6 +75,7 @@ import SyouGroupPieChart from './components/SyouGroupPieChart';
 import SyouVerticalBarChart from './components/SyouVerticalBarChart';
 import SyouTickDashChart from './components/SyouTickDashChart';
 import SyouBubbleChart from './components/SyouBubbleChart';
+import DataProvider from './DataProvider';
 
 export default {
   name: 'App',
@@ -91,6 +92,24 @@ export default {
     DynamicAttrIndicator,
     SyouTickDashChart,
     SyouBubbleChart,
+  },
+  data () {
+    return {
+      bubbleData: {}
+    }
+  },
+  mounted: function() {
+
+    DataProvider.getItemGroupCsv().then(response => {
+
+          //this data is bind with the instance of component
+          this.bubbleData = response.data
+          
+        }, error => {
+
+          console.log('unable to get data')
+        });
+
   }
 }
 </script>
