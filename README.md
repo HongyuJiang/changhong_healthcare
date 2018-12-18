@@ -2,4 +2,4 @@
 
 by Hongyu
 
-![Demo](teaser.gif)
+![teaser](teaser.png)
